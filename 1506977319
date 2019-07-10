@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html lang='EN-US'>
+  <head>
+    <meta charset = "UTF-8">
+    <title>Drew K Goodin</title>
+    <meta name = "viewport" content = "width=device-width">
+    <meta name = "viewport" content = "initial-scale=1.0">
+    <link rel = "stylesheet"
+      type = "text/css"
+      href = "/static/style.css" />
+  </head>
+  <body>
+<p>I'd like to walk through a bare-bones setup for installing CentOS 7 over the network via DHCP/PXE/TFTP/NFS. </p>
+
+<p>This setup has one machine running already running CentOS (but it could be any number of operating systems), which provides all of the above services. It is connected to the network on the same subnet as described below in the DHCP section, but with a static IP address outside the range declared in the configuration.</p>
+
+<p>Packages you will need installed and enabled:</p>
+
+<p><strong><code>package name</code></strong> - <strong><code>service name</code></strong>:</p>
+
+<ul>
+<li><strong><code>dhcp</code></strong> - <strong><code>dhcpd</code></strong></li>
+<li><strong><code>tftp-server</code></strong> - <strong><code>tftp</code></strong></li>
+<li><strong><code>nfs-server</code></strong> - <strong><code>nfs</code></strong></li>
+<li><strong><code>rpcbind</code></strong> - <strong><code>rpcbind</code></strong> (needed for nfs; remote procedure calls)</li>
+<li><strong><code>syslinux</code></strong> - service is N/A; we just need the bootloader file included with this package</li>
+</ul>
+
+<p>I've disabled <strong><code>firewalld</code></strong> and SELinux on the serving machine for simplicity.</p>
+
+<p>The high-level situation is as follows:</p>
+
+<ul>
+<li>Client is connected to the network with Ethernet and configured (in BIOS) to boot via its Ethernet interface as first priority.</li>
+<li>Client boots and is provided, automatically by DHCP server, with an IP address (and other network values) as well as the name of the PXE bootloader file.</li>
+<li>Client loads bootloader file, the kernel image, and the initial ram disk image via TFTP.</li>
+<li>Client loads install media via NFS.</li>
+</ul>
+
+<h3>Service Configuration:</h3>
+
+<h4>DHCP</h4>
+
+<p>This is a very simple DHCP configuration. The config file is /etc/dhcp/dhcpd.conf:</p>
+
+<pre><code>option broadcast-address 192.168.0.255;
+option routers 192.168.0.1;
+option domain-name-servers 8.8.8.8, 8.8.4.4;
+option subnet-mask 255.255.255.0;
+default-lease-time 600;
+max-lease-time 7200;
+subnet 192.168.0.0 netmask 255.255.255.0 {
+        range 192.168.0.10 192.168.0.100;
+        filename "pxelinux.0";
+}
+</code></pre>
+
+<p>This defines a single subnet with a range of about 90 IPs. It declares DNS servers globally. Lastly, and most importantly for our purposes, it gives the name of the PXE bootloader file, which our target machine is going to ask for. PXE, by default, assumes the use of TFTP and that the root directory for TFTP is /var/lib/tftpboot. The TFTP service uses this directory as its root by default, which is why we're able to provide a relative pathname to the bootloader file.</p>
+
+<h4>TFTP</h4>
+
+<p>Very simple. Just set "disable" to "no" in the configuration file, which is /etc/xinet.d/tftp:</p>
+
+<pre><code>service tftp
+{
+        socket_type             = dgram
+        protocol                = udp
+        wait                    = yes
+        user                    = root
+        server                  = /usr/sbin/in.tftpd
+        server_args             = -s /var/lib/tftpboot
+        disable                 = no
+        per_source              = 11
+        cps                     = 100 2
+        flags                   = IPv4
+}
+</code></pre>
+
+<h4>PXE</h4>
+
+<p>This is not a service in the traditional sense, but there is still a configuration file involved. We also have to copy the bootloader file from the syslinux package to our TFTP root. Let's do that first:</p>
+
+<p><code>sudo cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/</code></p>
+
+<p>Next we have to make a default configuration file and the corresponding directory. This file tells PXE the names of the kernel and initial ram disk image files. It also serves to configure how the install menu will look and behave. Additionally, we can pass kernel parameters such as the location of a Kickstart file for an unattended install. We won't use a Kickstart here, but we will pass some additional information, namely that will will be doing a casper install (booting into the LiveCD environment directly) over NFS. There are tons of options for PXE configuration and I don't entirely understand it. <a href="http://www.syslinux.org/wiki/index.php?title=PXELINUX">Here</a> is a link to the docs. But let's proceed:</p>
+
+<p><code>mkdir /var/lib/tftpboot/pxelinux.cfg</code></p>
+
+<p>Now our configuration file, /var/lib/tftpboot/pxelinux.cfg/default:</p>
+
+<pre><code>default linux
+label linux
+  kernel vmlinuz
+  append initrd=initrd.img inst.stage2=nfs:192.168.0.4:/share/install-tree quiet
+</code></pre>
+
+<p>What's important here is the specific name of the kernel and initrd files (you will see where to find these below) Additionally, we've given it that NFS information alluded to above.</p>
+
+<h4>NFS</h4>
+
+<p>First, download a full iso file for your architecture (in this case, amd64), either via browser or command line. In this case the file we end up with is:</p>
+
+<pre><code>~/CentOS-7-x86_64-DVD-1810.iso
+</code></pre>
+
+<p>Next, mount the iso and copy the resulting source tree to a directory that we will export over NFS:</p>
+
+<p><code>sudo mkdir /mnt</code> (for the iso mount)</p>
+
+<p><code>sudo mkdir /share/install-tree</code> (for the NFS export)</p>
+
+<p><code>sudo mount -o loop -t iso9660 ~/CentOS-7-x86_64-DVD-1810.iso /mnt</code></p>
+
+<p>Now to copy over the source tree:</p>
+
+<p><code>cp -a /mnt/. /share/install-tree</code></p>
+
+<p>The configuration file for NFS is /etc/exports. It determines what directories are shareable, to which clients, and with what privileges/options. The format is [directory] [client](options). In this case, we want /share exported to all clients (this is on a network behind a router, so I'm not concerned). The [client] field supports wildcards, IP groups, individual hostnames, and more. We will pass two options as well: read-only (ro) and no_root_squash, which ensures and action taken in the shared directory by the root user on the client does so with root privileges as far as the server is concerned.</p>
+
+<p>/etc/exports:</p>
+
+<pre><code>/share/install-tree *(ro,no_root_squash)
+</code></pre>
+
+<h4>Wrapping up</h4>
+
+<p>Let's grab the kernel and initrd images and copy them over to the TFTP root directory. We won't get far without doing that.</p>
+
+<p><code>sudo cp /share/install-tree/images/pxeboot/vmlinuz /share/install-tree/images/pxeboot/initrd.img /var/lib/tftpboot/</code></p>
+
+<p>Lastly, we can unmount the iso image:</p>
+
+<p><code>sudo umount /mnt</code></p>
+
+<p>Make sure all the services involved are enabled and running. When the target machine is booted over network, it should boot itself into the installer.</p>
+
+<p>After a successful install, make sure to change your BIOS setting(s) back to ensure the machine no longer tries to boot from its network interface, or else you'll just start the process over.</p>
+  </body>
+</html>
