@@ -1,4 +1,4 @@
-<p><!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html lang='EN-US'>
   <head>
     <meta charset = "UTF-8">
@@ -10,7 +10,7 @@
       href = "/style.css" />
   </head>
   <body>
-<a href="/blog.html">Blog home</a></p>
+<p><a href="/blog.html">Blog home</a></p>
 
 <h2>HTML::Mason and PSGI; a uniting module</h2>
 
@@ -43,6 +43,6 @@ my $app = sub {
 
 <p>Just use an <code>app.psgi</code> file like the above, or do something more sophisticated via Plack::Builder (there is a lot of great Plack middleware that you can easily wrap your Mason application with). In the same directory as your psgi file, you will need to create a directory called "components" as the component root for Mason, and optionally a plain text file called ".mime_types". See the link to the module source above for more information.</p>
 
-<p>After that, <code>plackup app.psgi</code> will serve your Mason application on port 5000.
+<p>After that, <code>plackup app.psgi</code> will serve your Mason application on port 5000.</p>
   </body>
-</html></p>
+</html>
