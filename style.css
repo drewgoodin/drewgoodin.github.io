@@ -1,10 +1,11 @@
 body {
     font-family:serif;
-    #background-color:HSL(120,30%,100%);
-    background-color:BlanchedAlmond;
+    background-color:HSL(155,60%,80%);
+    #background-color:MediumAquamarine;
+    opacity: 80%;
 }
 pre {
-    background-color:HSL(120,50%,95%);
+    background-color:HSL(150,50%,70%);
     display:inline-block;
     border:1px solid black;
     border-radius:5px;
