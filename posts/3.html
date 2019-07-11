@@ -20,14 +20,13 @@
 
 <p>In its simplest form, a PSGI application file can return the array reference directly, but for most any application beyond the trivial, it will call Perl code that the application developer has factored into packages which in turn return construct and return the array reference. Moreover, the major Perl web frameworks do this for you, abstracting you away from PSGI entirely.</p>
 
-<p>Nevertheless, I wrote a <a href="https://github.com/goodind1/slurm">module</a> (source) that allows the use of HTML::Mason, my favorite templating engine/framework, with PSGI.</p>
+<p>Nevertheless, I wrote a <a href="https://github.com/goodind1/slurm">module</a> that allows the use of HTML::Mason, my favorite templating engine/framework, with PSGI.</p>
 
-<p>The module consists of three packages/classes:</p>
+<p>The module consists of two packages/classes:</p>
 
 <ul>
-<li><p>Slurm::Response: Constructs the PSGI array reference. The run() subroutine takes in the environment hash passed in by Plack when the server is started and the app is run. It uses this to try and figure out the Content-type and body of the response, with the help of the other two packages:</p></li>
+<li><p>Slurm::Response: Constructs the PSGI response array reference. Its constructor takes in the environment hash passed in by Plack when the server is started. The path of the requested resource is then passed to an HTML::Mason::Interp object, along with any arguments provided via GET or POST. This object returns the body of the response. Users can set the HTTP response code on a per-component basis if they wish, but otherwise, 200 is used. The content type of the response is set with the help of the other package:</p></li>
 <li><p>Slurm::Type: Contains a function that determines Content-type by comparing file extensions to a user-populated configuration file. If it can't, text/html is used.</p></li>
-<li><p>Slurm::View: Contains a function that determines the response body. The function passes the path of the requested URI to an HTML::Mason::Interp object, along with any query string/content arguments and the entire Plack environment hash. This additional data can be accessed in Mason components by declaring appropriate 'args' sections.</p></li>
 </ul>
 
 <p>Here is a minimal app.psgi to use the module:</p>
@@ -36,11 +35,11 @@
 
 my $app = sub { 
     my $resp = Slurm::Response-&gt;new(shift);
-    $resp-&gt;send;
+    $resp-&gt;send();
 };
 </code></pre>
 
-<p>To get the module, download the tarball <a href="https://github.com/goodind1/slurm/releases/download/v0.1/Slurm-0.tar.gz">here</a> and install with <code>cpan</code> or <code>cpanm</code>.</p>
+<p>To get the module, download the tarball <a href="https://github.com/goodind1/slurm/releases/download/v0.1/Slurm-0.tar.gz">here</a> and install with <code>cpan</code> or <code>cpanm</code>. </p>
 
 <p>Just use an <code>app.psgi</code> file like the above, or do something more sophisticated via Plack::Builder (there is a lot of great Plack middleware that you can easily wrap your Mason application with). In the same directory as your psgi file, you will need to create a directory called "components" as the component root for Mason, and optionally a plain text file called ".mime_types". See the link to the module source above for more information.</p>
 
