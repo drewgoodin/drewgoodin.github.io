@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<p><!DOCTYPE HTML>
 <html lang='EN-US'>
   <head>
     <meta charset = "UTF-8">
@@ -10,6 +10,10 @@
       href = "/style.css" />
   </head>
   <body>
+<a href="/blog.html">Blog home</a></p>
+
+<h2>A Multiplexed Bash Shell in Windows</h2>
+
 <p>I'm trying <a href="https://docs.microsoft.com/en-us/windows/wsl/about">WSL</a> out for a while on a new Windows 10 machine. Here is a solution for getting the terminal environment close to what I'm used to in Linux, which is a simple split session via tmux.</p>
 
 <p>In WSL, tmux 2.1 is installed by default.  I like just two vertical panes - one for file editing and one for normal shell interaction. When I open a WSL terminal session, I'd like it to pop right into that environment. Here's a way to do this:</p>
@@ -44,6 +48,6 @@ splitw -h
 New-alias tmux Bash_fn
 </code></pre>
 
-<p>This script creates an alias so that when "tmux" is entered in PowerShell, WSL is invoked along with  a command - "tmux attach". I'm thrown directly into my preferred Linux environment. It also takes an optional argument - a directory - and if this argument is provided, bash cd's into it before starting tmux. This way, since tmux is starting with two panes, I don't have to change directories on each pane individually. When tmux exits, so does bash (the -c switch functions this way), and I'm sent back to PowerShell.</p>
+<p>This script creates an alias so that when "tmux" is entered in PowerShell, WSL is invoked along with  a command - "tmux attach". I'm thrown directly into my preferred Linux environment. It also takes an optional argument - a directory - and if this argument is provided, bash cd's into it before starting tmux. This way, since tmux is starting with two panes, I don't have to change directories on each pane individually. When tmux exits, so does bash (the -c switch functions this way), and I'm sent back to PowerShell.
   </body>
-</html>
+</html></p>

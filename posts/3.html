@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<p><!DOCTYPE HTML>
 <html lang='EN-US'>
   <head>
     <meta charset = "UTF-8">
@@ -10,6 +10,10 @@
       href = "/style.css" />
   </head>
   <body>
+<a href="/blog.html">Blog home</a></p>
+
+<h2>HTML::Mason and PSGI; a uniting module</h2>
+
 <p>Note: this is not about HTML::Mason::PSGIHandler, a module that I did not know existed before I came up with my own solution.</p>
 
 <p><a href="http://plackperl.org">PSGI</a> specifies a simple way for Perl applications to talk to (PSGI compliant) web servers. A PSGI application file must include a Perl subroutine reference that returns a three-element array reference: the HTTP response code, an array reference of headers, and an array reference (or possibly a filehandle) containing the response body. The subroutine reference is should be the last declared item in the file. A PSGI-compliant server calls this file and loads the application.</p>
@@ -40,6 +44,6 @@ my $app = sub {
 
 <p>Just use an <code>app.psgi</code> file like the above, or do something more sophisticated via Plack::Builder (there is a lot of great Plack middleware that you can easily wrap your Mason application with). In the same directory as your psgi file, you will need to create a directory called "components" as the component root for Mason, and optionally a plain text file called ".mime_types". See the link to the module source above for more information.</p>
 
-<p>After that, <code>plackup app.psgi</code> will serve your Mason application on port 5000.</p>
+<p>After that, <code>plackup app.psgi</code> will serve your Mason application on port 5000.
   </body>
-</html>
+</html></p>
