@@ -23,23 +23,30 @@ HTML::Mason and PSGI; a uniting module
 
 <p>In its simplest form, a PSGI application file can return the array reference directly, but for most any application beyond the trivial, it will call Perl code that the application developer has factored into packages which in turn return construct and return the array reference. Moreover, the major Perl web frameworks do this for you, abstracting you away from PSGI entirely.</p>
 
-<p>Nevertheless, I wrote a <a href="https://github.com/goodind1/slurm">module</a> that allows the use of HTML::Mason, my favorite templating engine/framework, with PSGI.</p>
+<p>Nevertheless, I wrote a <a href="https://github.com/goodind1/slurm">module</a> that allows the use of HTML::Mason, my favorite templating engine, with PSGI.</p>
 
 <p>The module consists of two packages/classes:</p>
 
 <ul>
 <li><p>Slurm::Response: Constructs the PSGI response array reference. Its constructor takes in the environment hash passed in by Plack when the server is started. The path of the requested resource is then passed to an HTML::Mason::Interp object, along with any arguments provided via GET or POST. This object returns the body of the response. Users can set the HTTP response code on a per-component basis if they wish, but otherwise, 200 is used. The content type of the response is set with the help of the other package:</p></li>
-<li><p>Slurm::Type: Contains a function that determines Content-type by comparing file extensions to a user-populated configuration file. If it can't, text/html is used.</p></li>
+<li><p>Slurm::Type: Contains a function that determines Content-type by comparing file extensions to a user-populated configuration file. If it can't, text/html is used. Content type (and any other header), as well as HTTP status code, can be set in Mason components; see the GitHub readme.</p></li>
 </ul>
 
 <p>Here is a minimal app.psgi to use the module:</p>
 
 <pre><code>use Slurm::Response;
 
-my $app = sub { 
-    my $resp = Slurm::Response-&gt;new(shift);
-    $resp-&gt;send();
-};
+my $interp = HTML::Mason::Interp-&gt;new(
+  comp_root =&gt; "$ENV{PWD}/components",
+);
+
+my $app = sub {
+  my $response = Slurm::Response-&gt;new(
+    shift,
+    $interp,
+  );
+  $response-&gt;send();
+}
 </code></pre>
 
 <p>To get the module, download the tarball <a href="https://github.com/goodind1/slurm/releases/download/v0.1/Slurm-0.tar.gz">here</a> and install with <code>cpan</code> or <code>cpanm</code>. </p>
