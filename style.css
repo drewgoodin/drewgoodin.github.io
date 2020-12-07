@@ -35,3 +35,7 @@ a {
 #tags {
 	max-width: 750px;
 }
+
+p {
+  max-width: 750px;
+}
