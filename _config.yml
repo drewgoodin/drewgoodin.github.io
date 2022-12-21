@@ -95,5 +95,5 @@ repository:  "drewgoodin/drewgoodin.github.io"
 comments:
   provider: "staticman_v2"
   staticman:
-    branch: "master/_data"
+    branch: "master"
     endpoint: "https://staticman.thewindowtailor.com/v3/entry/github/"
