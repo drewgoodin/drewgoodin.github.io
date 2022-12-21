@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>/breads%20and%20dough/2022/08/14/puff-pastry.html</loc>
+<lastmod>2022-08-14T00:00:00-07:00</lastmod>
+</url>
+<url>
+<loc>/breads%20and%20dough/2022/08/30/pizza-dough.html</loc>
+<lastmod>2022-08-30T00:00:00-07:00</lastmod>
+</url>
+<url>
+<loc>/stews/2022/11/29/chilindron.html</loc>
+<lastmod>2022-11-29T00:00:00-08:00</lastmod>
+</url>
+<url>
+<loc>/chicken/2022/12/19/chicken-thighs-with-poppyseed-dumplings.html</loc>
+<lastmod>2022-12-19T00:00:00-08:00</lastmod>
+</url>
+<url>
 <loc>/about/</loc>
 </url>
 <url>
@@ -8,6 +24,9 @@
 </url>
 <url>
 <loc>/</loc>
+</url>
+<url>
+<loc>/recipes/</loc>
 </url>
 <url>
 <loc>/assets/files/resume-goodin.pdf</loc>
