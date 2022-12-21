@@ -1,4 +1,10 @@
 var store = [{
+        "title": "Seafood Stew",
+        "excerpt":" ","categories": ["Stews"],
+        "tags": [],
+        "url": "/stews/2022/07/29/seafood-stew.html",
+        "teaser": null
+      },{
         "title": "Puff Pastry",
         "excerpt":" ","categories": ["Breads and Dough"],
         "tags": [],
