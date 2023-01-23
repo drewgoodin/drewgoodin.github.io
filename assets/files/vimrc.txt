@@ -1,4 +1,4 @@
-filetype plugin indent on 
+filetype plugin on 
 set number relativenumber
 set nohlsearch
 set autoindent
