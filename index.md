@@ -26,9 +26,9 @@ feature_row:
     btn_label: "Go"
     btn_class: "btn--inverse"
   - image_path: "/assets/images/windowtailor.jpg"
-    url: "https://thewindowtailor.com"
+    url: "https://bayareablinds.biz"
     title: "Work"
-    excerpt: "The Window Tailor, my 9-to-5 (usually)."
+    excerpt: "My window treatment business!"
     btn_label: "Go"
     btn_class: "btn--inverse"
 ---
