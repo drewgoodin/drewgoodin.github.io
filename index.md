@@ -12,6 +12,4 @@ excerpt: "Thanks for checking out my site."
   actions:
     - label: "About Drew"
       url: "/about"
-    - label: "Links"
-      url: "/links"
 ---
