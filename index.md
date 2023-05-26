@@ -2,9 +2,9 @@
 layout: archive
 classes: wide
 author_profile: true
-title: Welcome
-header:
+title: "Welcome"
 excerpt: "Thanks for checking out my site."
+header:
   overlay_color: "#000"
   overlay_filter: "0.5"
   overlay_image: /assets/images/autumn.jpg
@@ -13,3 +13,4 @@ excerpt: "Thanks for checking out my site."
     - label: "About Drew"
       url: "/about"
 ---
+
