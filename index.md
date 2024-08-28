@@ -10,7 +10,7 @@ header:
   overlay_image: /assets/images/autumn.jpg
   caption: "Artwork credit: [Jeff Ostberg](https://jeffostberg.se/)"
 ---
-Hi there, I'm Drew. I like to work with my hands and play with computers. I hold a BS in Mathematics and am pursuing graduate study. Here's a [resume](/assets/files/resume-goodin.pdf).
+Hi there, I'm Drew. I like to work with my hands and play with computers. I hold a BS in Mathematics though and wood is my preferred medium.
 
 My hobbies include hi-fidelity audio, playing/maintaining guitars and their peripherals, and - at a dangerous age - I'm teaching myself to skateboard again, a relic activity of my youth in Half Moon Bay.
 
